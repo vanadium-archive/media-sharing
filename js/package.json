@@ -1,0 +1,18 @@
+{
+  "name": "media-client",
+  "private": true,
+  "version": "0.0.0",
+  "description": "client for Vanadium media server",
+  "main": "src/index.js",
+  "license": "ISC",
+  "dependencies": {
+    "domready": "~1.0.8"
+  },
+  "devDependencies": {
+    "browserify": "~10.2.0",
+    "jshint": "~2.7.0",
+    "exorcist": "~0.4.0",
+    "uglifyify": "~3.0.1",
+    "node-static": "~0.7.6"
+  }
+}

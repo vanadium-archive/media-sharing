@@ -1,3 +1,5 @@
 /.v23
-go/pkg/
-go/bin/
+/go/pkg/
+/go/bin/
+/js/build
+/js/node_modules
