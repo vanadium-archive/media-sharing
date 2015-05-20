@@ -216,7 +216,7 @@ var descMediaSharing = rpc.InterfaceDesc{
 		},
 		{
 			Name: "DisplayBytes",
-			Doc:  "// DisplayBytes will cause the server to display whatever media is\n// sent in the stream.  In the case of audio or movie media, the \n// media should be played while the data is streaming.  The mediaType\n// can be used by the server to decide how to display the media.",
+			Doc:  "// DisplayBytes will cause the server to display whatever media is\n// sent in the stream.  In the case of audio or movie media, the\n// media should be played while the data is streaming.  The mediaType\n// can be used by the server to decide how to display the media.",
 			InArgs: []rpc.ArgDesc{
 				{"mediaType", ``}, // string
 			},
