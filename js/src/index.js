@@ -57,10 +57,8 @@ function sendToDisplay(rt, file, cb) {
     var promise = s.displayBytes(ctx, file.type);
     promise.catch(cb);
     promise.stream.on('error', cb);
-    promise.stream.on('finish', function() { cb(null); });
+    promise.stream.on('finish', cb);
 
-    // TODO(nlacasse): Chunk these bytes! Currently we send the file in one big
-    // chunk.
-    promise.stream.end(file.bytes);
+    file.stream.pipe(promise.stream);
   });
 }

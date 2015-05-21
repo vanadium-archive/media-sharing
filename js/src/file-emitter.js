@@ -5,6 +5,7 @@
 var EE = require('events').EventEmitter;
 var format = require('format');
 var inherits = require('inherits');
+var ReadableBlobStream = require('readable-blob-stream');
 
 module.exports = FileEmitter;
 
@@ -13,7 +14,6 @@ function FileEmitter(input) {
 
   // TODO(nlacasse): Consider making these an argument to FileEmitter;
   this._allowedTypes = ['audio', 'image', 'video'];
-  this._maxSize = 10 * 1000 * 1000; // 10MB
 
   input.addEventListener('change', this._onFileChange.bind(this), false);
 }
@@ -46,27 +46,10 @@ FileEmitter.prototype._onFileChange = function(ev) {
     return;
   }
 
-  // TODO(nlacasse): Consider removing the file size limit.
-  if (file.size > this._maxSize) {
-    this.emit('error', format('File too large.'));
-    return;
-  }
-
-  var reader = new FileReader();
-
-  var self = this;
-  reader.addEventListener('error', function(ev) {
-    self.emit('error', ev);
+  this.emit('file', {
+    name: file.name,
+    size: file.size,
+    type: file.type,
+    stream: new ReadableBlobStream(file)
   });
-
-  reader.addEventListener('load', function() {
-    self.emit('file', {
-      name: file.name,
-      type: file.type,
-      size: file.size,
-      bytes: new Uint8Array(reader.result)
-    });
-  });
-
-  reader.readAsArrayBuffer(file);
 };

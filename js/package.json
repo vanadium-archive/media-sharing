@@ -8,6 +8,7 @@
   "dependencies": {
     "domready": "~1.0.8",
     "format": "~0.2.1",
+    "readable-blob-stream": "0.0.0",
     "inherits": "~2.0.1"
   },
   "devDependencies": {
