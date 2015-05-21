@@ -40,12 +40,11 @@ node_modules: package.json
 src/gen-vdl: $(shell find ../go/src/ -name "*.vdl")
 	v23 run vdl generate --lang=javascript --js-out-dir=src/gen-vdl v.io/x/media_sharing
 
-build/bundle.js: src/index.js $(shell find src/ -name "*.js") src/gen-vdl node_modules
-	mkdir -p build
-ifndef NOMINIFY
-	$(call BROWSERIFY,$<,$@)
-else
+build/bundle.js: src/index.js $(shell find src/ -name "*.js") src/gen-vdl lint node_modules
+ifdef MINIFY
 	$(call BROWSERIFY-MIN,$<,$@)
+else
+	$(call BROWSERIFY,$<,$@)
 endif
 
 build/index.html: public/index.html

@@ -6,7 +6,9 @@
   "main": "src/index.js",
   "license": "ISC",
   "dependencies": {
-    "domready": "~1.0.8"
+    "domready": "~1.0.8",
+    "format": "~0.2.1",
+    "inherits": "~2.0.1"
   },
   "devDependencies": {
     "browserify": "~10.2.0",
