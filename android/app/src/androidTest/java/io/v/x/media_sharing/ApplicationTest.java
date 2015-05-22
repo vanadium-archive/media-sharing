@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-package io.v.projects.mediasharing;
+package io.v.x.media_sharing;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
