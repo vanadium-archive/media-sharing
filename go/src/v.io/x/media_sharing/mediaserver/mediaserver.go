@@ -28,6 +28,13 @@ import (
 )
 
 func main() {
+	// When we run under the device manager, no environment is set up.
+	// We want to have some kind of path.
+	if os.Getenv("PATH") == "" {
+		os.Setenv("PATH", "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin")
+		os.Setenv("HOME", "/home/testuser1")
+	}
+
 	cmdline.Main(root)
 }
 
@@ -93,7 +100,7 @@ func (eogHandler) Display(ctx *context.T, mimetype string, r io.ReadCloser) (fun
 		return nil, err
 	}
 
-	cmd := exec.Command("eog", "-f", tmp.Name())
+	cmd := exec.Command("eog", "--display", ":0", "-f", tmp.Name())
 	stop := func() {
 		if cmd.Process != nil {
 			if err := cmd.Process.Kill(); err != nil {
@@ -118,6 +125,7 @@ func (vlcHandler) Display(ctx *context.T, mimetype string, r io.ReadCloser) (fun
 	args := []string{
 		"--no-video-title-show",
 		"--fullscreen",
+		"--x11-display", ":0",
 		"-",
 		"vlc://quit",
 	}
