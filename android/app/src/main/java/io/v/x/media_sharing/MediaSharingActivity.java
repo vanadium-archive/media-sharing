@@ -30,7 +30,7 @@ public class MediaSharingActivity extends ActionBarActivity {
         String action = getIntent().getAction();
         String type = getIntent().getType();
         if (Intent.ACTION_SEND.equals(action) && type != null) {
-            if (type.startsWith("image/") || type.startsWith("video/")) {
+            if (type.startsWith("image/") || type.startsWith("video/") || type.startsWith("audio/")) {
                 Uri uri = (Uri)getIntent().getExtras().get(Intent.EXTRA_STREAM);
                 String mimeType = getIntent().getType();
 
