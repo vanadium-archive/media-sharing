@@ -7,6 +7,8 @@ package io.v.x.media_sharing;
 import android.app.Activity;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.util.Log;
+import android.widget.Toast;
 
 import org.apache.commons.io.IOUtils;
 
@@ -23,6 +25,8 @@ import io.v.v23.verror.VException;
  * Background task to stream media without blocking the UI thread.
  */
 public class SendMediaTask extends AsyncTask<Void, Void, Void> {
+    private static final String TAG = "SendMediaTask";
+
     Activity activity;
     VContext vContext;
     String targetName;
@@ -55,10 +59,26 @@ public class SendMediaTask extends AsyncTask<Void, Void, Void> {
             ClientByteOutputStream os = new ClientByteOutputStream(stream);
             IOUtils.copy(is, os);
             stream.finish();
+
+            Log.i(TAG, activity.getString(R.string.share_messsage_success));
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(activity, R.string.share_messsage_success, Toast.LENGTH_LONG).show();
+                }
+            });
             return null;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (VException e) {
+        } catch (IOException|VException e) {
+            final String errorMessage = activity.getString(R.string.share_messsage_error) + ": " + e.toString();
+            Log.e(TAG, errorMessage);
+
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(activity, errorMessage, Toast.LENGTH_LONG).show();
+                }
+            });
+
             throw new RuntimeException(e);
         }
     }

@@ -4,29 +4,50 @@
 
 package io.v.x.media_sharing;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 
 import io.v.v23.V;
 import io.v.v23.context.VContext;
 
 
 public class MediaSharingActivity extends ActionBarActivity {
-    // Target name must be entered manually. Go to namespace browser for the name you want to
-    // connect to and copy the proxied name here.
-    private static final String targetName = "";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_media_sharing);
 
-        VContext vContext = V.init();
+        final VContext vContext = V.init();
 
+        final EditText namebox = (EditText)findViewById(R.id.share_name);
+        final SharedPreferences pref = this.getPreferences(Context.MODE_PRIVATE);
+        String lastName = pref.getString(getString(R.string.preference_last_name), "");
+        namebox.setText(lastName);
+
+        final Button button = (Button)findViewById(R.id.share_button);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String name = namebox.getText().toString();
+                SharedPreferences.Editor editor = pref.edit();
+                editor.putString(getString(R.string.preference_last_name), name);
+                editor.commit();
+                onButtonClick(vContext, name);
+                MediaSharingActivity.this.finish();
+            }
+        });
+    }
+
+    protected void onButtonClick(final VContext vContext, final String targetName) {
         String action = getIntent().getAction();
         String type = getIntent().getType();
         if (Intent.ACTION_SEND.equals(action) && type != null) {
@@ -34,10 +55,10 @@ public class MediaSharingActivity extends ActionBarActivity {
                 Uri uri = (Uri)getIntent().getExtras().get(Intent.EXTRA_STREAM);
                 String mimeType = getIntent().getType();
 
-                new SendMediaTask(this, vContext, targetName, uri, mimeType).execute();
+                new SendMediaTask(MediaSharingActivity.this, vContext, targetName, uri, mimeType).execute();
             } else if ("text/plain".equals(type)) {
                 String url = (String)getIntent().getExtras().get(Intent.EXTRA_TEXT);
-                new SendUrlTask(vContext, targetName, url).execute();
+                new SendUrlTask(this, vContext, targetName, url).execute();
             }
         }
     }

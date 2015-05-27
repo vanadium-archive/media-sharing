@@ -2,5 +2,9 @@
     <string name="app_name">MediaSharing</string>
     <string name="title_activity_media_sharing">Media Sharing</string>
     <string name="action_settings">Settings</string>
-    <string name="media_sharing_message">Sharing Media...</string>
+    <string name="media_sharing_message">Vanadium Name to Share To:</string>
+    <string name="button_text">Share</string>
+    <string name="preference_last_name"></string>
+    <string name="share_messsage_success">Share succeeded</string>
+    <string name="share_messsage_error">Error sharing</string>
 </resources>
