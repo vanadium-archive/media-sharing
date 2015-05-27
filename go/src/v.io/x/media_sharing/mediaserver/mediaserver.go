@@ -97,22 +97,66 @@ func (eogHandler) Display(ctx *context.T, mimetype string, r io.ReadCloser) (fun
 		return nil, err
 	}
 	if _, err := io.Copy(tmp, r); err != nil {
+		os.Remove(tmp.Name())
 		return nil, err
 	}
+	tmp.Close()
 
 	cmd := exec.Command("eog", "--display", ":0", "-f", tmp.Name())
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
 	stop := func() {
-		if cmd.Process != nil {
-			if err := cmd.Process.Kill(); err != nil {
-				vlog.Errorf("Could not kill eog: %v", err)
-			}
+		if err := cmd.Process.Kill(); err != nil {
+			vlog.Errorf("Could not kill eog: %v", err)
 		}
+		cmd.Wait()
 		os.Remove(tmp.Name())
 	}
 	if err := cmd.Start(); err != nil {
 		return stop, err
 	}
 	return stop, nil
+}
+
+type omxHandler struct{}
+
+func (omxHandler) Matches(mimetype string) bool {
+	return strings.HasPrefix(mimetype, "video")
+}
+
+func (omxHandler) Display(ctx *context.T, mimetype string, r io.ReadCloser) (func(), error) {
+	defer r.Close()
+	tmp, err := ioutil.TempFile("", "")
+	if err != nil {
+		return nil, err
+	}
+	if _, err := io.Copy(tmp, r); err != nil {
+		os.Remove(tmp.Name())
+		return nil, err
+	}
+	tmp.Close()
+
+	args := []string{
+		"-b",
+		tmp.Name(),
+	}
+
+	vlog.Infof("Running: omxplayer %s", strings.Join(args, " "))
+
+	cmd := exec.Command("omxplayer", args...)
+	cmd.Stdin = r
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	if err := cmd.Start(); err != nil {
+		return nil, err
+	}
+	return func() {
+		if err := cmd.Process.Kill(); err != nil {
+			vlog.Errorf("Could not kill omx: %v", err)
+		}
+		cmd.Wait()
+		os.Remove(tmp.Name())
+	}, nil
 }
 
 type vlcHandler struct{}
@@ -122,11 +166,22 @@ func (vlcHandler) Matches(mimetype string) bool {
 }
 
 func (vlcHandler) Display(ctx *context.T, mimetype string, r io.ReadCloser) (func(), error) {
+	defer r.Close()
+	tmp, err := ioutil.TempFile("", "")
+	if err != nil {
+		return nil, err
+	}
+	if _, err := io.Copy(tmp, r); err != nil {
+		os.Remove(tmp.Name())
+		return nil, err
+	}
+	tmp.Close()
+
 	args := []string{
 		"--no-video-title-show",
 		"--fullscreen",
 		"--x11-display", ":0",
-		"-",
+		tmp.Name(),
 		"vlc://quit",
 	}
 
@@ -134,16 +189,20 @@ func (vlcHandler) Display(ctx *context.T, mimetype string, r io.ReadCloser) (fun
 		args = append([]string{"--audio-visual=visual"}, args...)
 	}
 
+	vlog.Infof("Running: vlc %s", strings.Join(args, " "))
+
 	cmd := exec.Command("vlc", args...)
-	cmd.Stdin = r
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
 	if err := cmd.Start(); err != nil {
 		return nil, err
 	}
 	return func() {
-		r.Close()
 		if err := cmd.Process.Kill(); err != nil {
 			vlog.Errorf("Could not kill vlc: %v", err)
 		}
+		cmd.Wait()
+		os.Remove(tmp.Name())
 	}, nil
 }
 
@@ -158,6 +217,7 @@ func defaultMediaServer() media_sharing.MediaSharingServerStub {
 	m := &media{
 		handlers: []handler{
 			&eogHandler{},
+			&omxHandler{},
 			&vlcHandler{},
 		},
 	}

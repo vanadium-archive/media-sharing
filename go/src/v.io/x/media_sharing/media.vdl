@@ -9,7 +9,7 @@ type MediaSharing interface {
  // the given URL.  The server will rely on the ContentType response
  // header it gets when fetching the url to decide how to display
  // the media.
-  DisplayUrl(url string) error
+ DisplayUrl(url string) error
 
  // DisplayBytes will cause the server to display whatever media is
  // sent in the stream.  In the case of audio or movie media, the

@@ -11,6 +11,9 @@ mkdir -p $V23_ROOT/release/go/bin/linux_arm
 cp $V23_ROOT/release/projects/media-sharing/go/bin/linux_arm/* $V23_ROOT/release/go/bin/linux_arm
 vbecome --role=identity/role/vprod/publisher device publish --goos=linux --goarch=arm mediaserver
 
-installation=$(device ls --installation-state=Active vlab/devices/rpi2media/devmgr/apps/mediaserver/* | tail -n 1)
+#installation=$(device ls --installation-state=Active vlab/devices/rpi2media/devmgr/apps/mediaserver/* | tail -n 1)
+installation=$(namespace glob vlab/devices/rpi2media/devmgr/apps/mediaserver/* | tail -n 1)
+instance=$(namespace glob $installation/* | tail -n 1)
 
-device updateall $installation
+device update -parallelism=BYKIND $installation
+device update -parallelism=BYKIND $instance
