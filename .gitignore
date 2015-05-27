@@ -1,8 +1,8 @@
 /.v23
 /android/.idea/
-/android/generated-src/
-/android/android.iml
-/android/app/app.iml
+/android/*.iml
+/android/app/*.iml
+/android/app/generated-src/
 /go/pkg/
 /go/bin/
 /js/build

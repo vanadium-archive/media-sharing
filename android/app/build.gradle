@@ -43,7 +43,6 @@ android {
         exclude 'META-INF/NOTICE.txt' // Duplicate clash between commons-io and joda-time
         exclude 'META-INF/MANIFEST.MF' // Duplicate clash between commons-io and joda-time
     }
-    sourceSets.main.java.srcDirs = ['src/main/java', '../generated-src/vdl']
 }
 
 dependencies {
