@@ -49,7 +49,7 @@ function appendStatus(text) {
 function sendToDisplay(rt, file, cb) {
   var ctx = rt.getContext();
   var client = rt.newClient();
-  client.bindTo(ctx, 'users/mattr@google.com/media', function(err, s) {
+  client.bindTo(ctx, 'users/mattr@google.com/media2', function(err, s) {
     if (err) {
       return cb(err);
     }
