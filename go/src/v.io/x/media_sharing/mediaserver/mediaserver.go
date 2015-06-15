@@ -15,7 +15,6 @@ import (
 	"strings"
 	"sync"
 
-	"v.io/v23"
 	"v.io/v23/context"
 	"v.io/v23/rpc"
 	"v.io/v23/security"
@@ -24,6 +23,7 @@ import (
 	"v.io/x/media_sharing"
 	"v.io/x/ref/lib/signals"
 	"v.io/x/ref/lib/v23cmd"
+	"v.io/x/ref/lib/xrpc"
 	_ "v.io/x/ref/runtime/factories/static"
 )
 
@@ -53,18 +53,11 @@ func serve(ctx *context.T, env *cmdline.Env, args []string) error {
 		fmt.Printf("mounting under: %s\n", name)
 	}
 
-	server, err := v23.NewServer(ctx)
+	server, err := xrpc.NewServer(ctx, name, defaultMediaServer(), security.AllowEveryone())
 	if err != nil {
 		return err
 	}
-	eps, err := server.Listen(v23.GetListenSpec(ctx))
-	if err != nil {
-		return err
-	}
-	if err := server.Serve(name, defaultMediaServer(), security.AllowEveryone()); err != nil {
-		return err
-	}
-	fmt.Printf("Listening at: %s", eps[0].Name())
+	fmt.Printf("Listening at: %s", server.Status().Endpoints[0].Name())
 
 	<-signals.ShutdownOnSignals(ctx)
 	return nil
