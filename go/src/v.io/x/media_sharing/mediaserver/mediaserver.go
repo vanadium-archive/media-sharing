@@ -15,6 +15,7 @@ import (
 	"strings"
 	"sync"
 
+	"v.io/v23"
 	"v.io/v23/context"
 	"v.io/v23/rpc"
 	"v.io/v23/security"
@@ -23,7 +24,6 @@ import (
 	"v.io/x/media_sharing"
 	"v.io/x/ref/lib/signals"
 	"v.io/x/ref/lib/v23cmd"
-	"v.io/x/ref/lib/xrpc"
 	_ "v.io/x/ref/runtime/factories/static"
 )
 
@@ -53,7 +53,7 @@ func serve(ctx *context.T, env *cmdline.Env, args []string) error {
 		fmt.Printf("mounting under: %s\n", name)
 	}
 
-	server, err := xrpc.NewServer(ctx, name, defaultMediaServer(), security.AllowEveryone())
+	_, server, err := v23.WithNewServer(ctx, name, defaultMediaServer(), security.AllowEveryone())
 	if err != nil {
 		return err
 	}
