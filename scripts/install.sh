@@ -11,7 +11,7 @@ set -e
 
 vbecome -role=identity/role/vlab/admin device associate add vlab/devices/${hostname}/devmgr/device testuser1 dev.v.io/u/mattr@google.com
 
-installation=$(vbecome -role=identity/role/vlab/admin device install vlab/devices/${hostname}/devmgr/apps applications/mediaserver/0)
+installation=$(vbecome -role=identity/role/vlab/admin device install vlab/devices/${hostname}/devmgr/apps applications/mediaserver)
 
 vbecome --role=identity/role/vlab/admin device acl set -f ${installation} \
   dev.v.io/role/vlab/admin Admin,Debug,Read,Resolve,Write \
