@@ -1,5 +1,5 @@
 SHELL := /bin/bash -euo pipefail
-export PATH := $(V23_ROOT)/release/go/bin:node_modules/.bin:$(V23_ROOT)/third_party/cout/node/bin:$(PATH)
+export PATH := $(JIRI_ROOT)/release/go/bin:node_modules/.bin:$(JIRI_ROOT)/third_party/cout/node/bin:$(PATH)
 
 # This target causes any target files to be deleted if the target task fails.
 # This is especially useful for browserify, which creates files even if it
@@ -31,9 +31,9 @@ endef
 node_modules: package.json
 	npm prune
 	npm install
-	# Link Vanadium from V23_ROOT.
+	# Link Vanadium from JIRI_ROOT.
 	rm -rf ./node_modules/vanadium
-	cd "$(V23_ROOT)/release/javascript/core" && npm link
+	cd "$(JIRI_ROOT)/release/javascript/core" && npm link
 	npm link vanadium
 	touch node_modules
 
