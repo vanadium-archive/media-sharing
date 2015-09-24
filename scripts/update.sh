@@ -6,7 +6,7 @@
 set -x
 set -e
 
-JIRI_PROFILE=arm v23 go install v.io/x/media_sharing/...
+JIRI_PROFILE=arm jiri go install v.io/x/media_sharing/...
 mkdir -p $JIRI_ROOT/release/go/bin/linux_arm
 cp $JIRI_ROOT/release/projects/media-sharing/go/bin/linux_arm/* $JIRI_ROOT/release/go/bin/linux_arm
 vbecome --role=identity/role/vprod/publisher device publish --goos=linux --goarch=arm mediaserver
