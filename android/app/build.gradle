@@ -3,12 +3,9 @@ apply plugin: 'com.android.application'
 buildscript {
     repositories {
         mavenCentral()
-        maven {
-            url 'http://jring.mtv:8081/nexus/content/repositories/test_repo'
-        }
     }
     dependencies {
-        classpath 'io.v:gradle-plugin:0.1-SNAPSHOT'
+        classpath 'io.v:gradle-plugin:0.1'
     }
 }
 
