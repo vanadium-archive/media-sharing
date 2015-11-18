@@ -22,12 +22,12 @@ type MediaSharingClientMethods interface {
 	// the given URL.  The server will rely on the ContentType response
 	// header it gets when fetching the url to decide how to display
 	// the media.
-	DisplayUrl(ctx *context.T, url string, opts ...rpc.CallOpt) error
+	DisplayUrl(_ *context.T, url string, _ ...rpc.CallOpt) error
 	// DisplayBytes will cause the server to display whatever media is
 	// sent in the stream.  In the case of audio or movie media, the
 	// media should be played while the data is streaming.  The mediaType
 	// can be used by the server to decide how to display the media.
-	DisplayBytes(ctx *context.T, mediaType string, opts ...rpc.CallOpt) (MediaSharingDisplayBytesClientCall, error)
+	DisplayBytes(_ *context.T, mediaType string, _ ...rpc.CallOpt) (MediaSharingDisplayBytesClientCall, error)
 }
 
 // MediaSharingClientStub adds universal methods to MediaSharingClientMethods.
@@ -129,12 +129,12 @@ type MediaSharingServerMethods interface {
 	// the given URL.  The server will rely on the ContentType response
 	// header it gets when fetching the url to decide how to display
 	// the media.
-	DisplayUrl(ctx *context.T, call rpc.ServerCall, url string) error
+	DisplayUrl(_ *context.T, _ rpc.ServerCall, url string) error
 	// DisplayBytes will cause the server to display whatever media is
 	// sent in the stream.  In the case of audio or movie media, the
 	// media should be played while the data is streaming.  The mediaType
 	// can be used by the server to decide how to display the media.
-	DisplayBytes(ctx *context.T, call MediaSharingDisplayBytesServerCall, mediaType string) error
+	DisplayBytes(_ *context.T, _ MediaSharingDisplayBytesServerCall, mediaType string) error
 }
 
 // MediaSharingServerStubMethods is the server interface containing
@@ -146,12 +146,12 @@ type MediaSharingServerStubMethods interface {
 	// the given URL.  The server will rely on the ContentType response
 	// header it gets when fetching the url to decide how to display
 	// the media.
-	DisplayUrl(ctx *context.T, call rpc.ServerCall, url string) error
+	DisplayUrl(_ *context.T, _ rpc.ServerCall, url string) error
 	// DisplayBytes will cause the server to display whatever media is
 	// sent in the stream.  In the case of audio or movie media, the
 	// media should be played while the data is streaming.  The mediaType
 	// can be used by the server to decide how to display the media.
-	DisplayBytes(ctx *context.T, call *MediaSharingDisplayBytesServerCallStub, mediaType string) error
+	DisplayBytes(_ *context.T, _ *MediaSharingDisplayBytesServerCallStub, mediaType string) error
 }
 
 // MediaSharingServerStub adds universal methods to MediaSharingServerStubMethods.
