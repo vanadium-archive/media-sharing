@@ -13,9 +13,6 @@ apply plugin: 'io.v.vdl'
 
 repositories {
     mavenCentral()
-    maven {
-        url 'http://jring.mtv:8081/nexus/content/repositories/test_repo'
-    }
 }
 
 android {
@@ -45,8 +42,8 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:22.1.1'
-    compile 'io.v:vanadium:0.1-SNAPSHOT'
-    compile 'io.v:vanadium-android:0.1-SNAPSHOT'
+    compile 'io.v:vanadium:0.1'
+    compile 'io.v:vanadium-android:0.1'
     compile group: 'commons-io', name: 'commons-io', version: '2.4'
 }
 
